@@ -99,7 +99,7 @@ FROM products
 JOIN categories ON products.category_id=categories.category_id 
 --WHERE categories.category_name='Beverages';
 
---23. Ürünlerin kategorilerine göre fiyat ortalamasını almak için bir sorgu yazın. //burayı sormalıyız
+--23. Ürünlerin kategorilerine göre fiyat ortalamasını almak için bir sorgu yazın.
 
 SELECT categories.category_name, AVG(unit_price) AS "Fiyat_Ortalaması"
 FROM products

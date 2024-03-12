@@ -26,7 +26,7 @@ SELECT product_name FROM products where units_in_stock<units_on_order;
 
 --7. İsmi `a` ile başlayan ürünleri listeleyeniz.
 
-SELECT product_name FROM products where product_name LIKE 'A%';
+SELECT product_name FROM products where product_name LIKE 'T%';
 
 --8. İsmi `i` ile biten ürünleri listeleyeniz.
 
@@ -34,7 +34,7 @@ SELECT product_name FROM products where product_name LIKE '%i';
 
 --9. Ürün birim fiyatlarına %18’lik KDV ekleyerek listesini almak (ProductName, UnitPrice, UnitPriceKDV) için bir sorgu yazın.
 
-SELECT product_name,unit_price,unit_price*1.18 As "kdv_dahil"  FROM products;
+SELECT product_name,unit_price,unit_price*1.18 As "Unit_Price_KDV"  FROM products;
 
 --10. Fiyatı 30 dan büyük kaç ürün var?
 
@@ -96,21 +96,21 @@ SELECT COUNT(*) AS "Stokta Olan Ve Durdurulan" FROM products WHERE units_in_stoc
 SELECT * FROM products;
 SELECT product_name AS "Ürün_Adı",categories.category_name AS "Kategori_Adı" ,unit_price 
 FROM products 
-JOIN categories ON products.category_id=categories.category_id 
---WHERE categories.category_name='Beverages';
+INNER JOIN categories ON products.category_id=categories.category_id 
+WHERE categories.category_name='Beverages';
 
 --23. Ürünlerin kategorilerine göre fiyat ortalamasını almak için bir sorgu yazın.
 
 SELECT categories.category_name, AVG(unit_price) AS "Fiyat_Ortalaması"
 FROM products
-JOIN categories ON products.category_id=categories.category_id
+INNER JOIN categories ON products.category_id=categories.category_id
 GROUP BY(categories.category_name);
 
 --24. En pahalı ürünümün adı, fiyatı ve kategorisin adı nedir?
 
 SELECT product_name AS "Ürün_Adı", unit_price AS "ÜrüN_Fiyatı" , categories.category_name
 FROM products
-JOIN categories ON products.category_id=categories.category_id
+INNER JOIN categories ON products.category_id=categories.category_id
 WHERE unit_price=(SELECT MAX(unit_price) FROM Products);
 
 --25. En çok satılan ürününün adı, kategorisinin adı ve tedarikçisinin adı
@@ -122,6 +122,6 @@ select category_id,category_name from categories;
 
 SELECT product_name AS "Ürün_Adı", categories.category_name AS "Kategori_Adı",suppliers.company_name AS "Tedarikçi_Firma",units_on_order AS "Sipariş_Adedi"
 FROM products
-JOIN categories ON products.category_id=categories.category_id
-JOIN suppliers ON products.supplier_id=suppliers.supplier_id
+INNER JOIN categories ON products.category_id=categories.category_id
+INNER JOIN suppliers ON products.supplier_id=suppliers.supplier_id
 WHERE units_on_order=(SELECT MAX(units_on_order) FROM products)

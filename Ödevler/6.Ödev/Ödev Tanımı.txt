@@ -1,0 +1,1 @@
+Daha önce yapmış olduğun diyagramları psql'de tablolaştır

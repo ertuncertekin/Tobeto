@@ -328,14 +328,12 @@ AND orders.order_date >(SELECT MAX(orders.order_date) from orders WHERE EXTRACT(
 --65. 10 numaralı ID ye sahip ürünümden son 3 ayda ne kadarlık ciro sağladım?
 
 --Burada tarih aralığındaki ürünleri bulduk
-SELECT product_id,SUM(unit_price*quantity),orders.order_date FROM order_details
+SELECT orders.order_id,product_id,SUM(unit_price*quantity) AS amount,orders.order_date FROM order_details
 INNER JOIN orders ON order_details.order_id=orders.order_id
-GROUP BY order_details.product_id,orders.order_date
+GROUP BY order_details.product_id,orders.order_date,orders.order_id
 HAVING product_id=10
 AND orders.order_date >= (SELECT MAX(orders.order_date) FROM orders)-INTERVAL '3 months' 
-AND orders.order_date <= (SELECT MAX(orders.order_date) FROM orders)
 ORDER BY orders.order_date DESC
-
 
 --Burası da aynı mantık
 SELECT product_id,SUM(unit_price*quantity),orders.order_date FROM order_details
@@ -347,13 +345,11 @@ ORDER BY orders.order_date DESC
 
 
 --burada o ürünleri toplattık--subquerry alt sorgu
-SELECT SUM(amount) FROM (
-SELECT product_id,SUM(unit_price*quantity) AS amount,orders.order_date FROM order_details
+SELECT SUM(amount) FROM(SELECT orders.order_id,product_id,SUM(unit_price*quantity) AS amount,orders.order_date FROM order_details
 INNER JOIN orders ON order_details.order_id=orders.order_id
-GROUP BY order_details.product_id,orders.order_date
+GROUP BY order_details.product_id,orders.order_date,orders.order_id
 HAVING product_id=10
 AND orders.order_date >= (SELECT MAX(orders.order_date) FROM orders)-INTERVAL '3 months' 
-AND orders.order_date <= (SELECT MAX(orders.order_date) FROM orders)
 )
 
 SELECT SUM(amount) AS total_amount FROM (SELECT product_id,SUM(unit_price * quantity) AS amount FROM order_details 
